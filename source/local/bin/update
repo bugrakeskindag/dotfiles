@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Attempt to update if Homebrew is available
+if [ -n "$(command -v brew 2> /dev/null)" ]; then
+  brew autoremove
+  brew update
+  brew upgrade
+  brew cleanup
+  brew doctor
+else
+  printf "Error: Homebrew is not available.\n" 1>&2
+  exit 1
+fi

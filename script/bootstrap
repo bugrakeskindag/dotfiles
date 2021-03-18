@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Set $PATH to get access to the 'brew' command
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
+
+# Install Homebrew if not already installed
+if [ -z "$(command -v brew 2> /dev/null)" ]; then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  printf "Info: Homebrew installation completed.\n"
+else
+  printf "Info: Homebrew is already installed.\n"
+fi
+
+# Start installing new packages if Homebrew installation was successful
+if [ -n "$(command -v brew 2> /dev/null)" ]; then
+  brew analytics off
+  brew install curl exiftool git gnupg lf lynx neomutt neovim openssh pass python rsync tmux tree urlview zsh
+  brew install --cask alacritty brave-browser ccleaner
+else
+  printf "Error: Homebrew installation failed.\n" 1>&2
+  printf "Start the installation again after removing the previous attempt using:\n" 1>&2
+  printf "  sudo rm -rf /usr/local 2> /dev/null\n" 1>&2
+  exit 1
+fi

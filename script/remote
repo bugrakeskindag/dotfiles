@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# Declare target location and remote URL
+readonly TARGET="$PWD/dotfiles"
+readonly REMOTE="https://github.com/bugrakeskindag/dotfiles.git"
+
+# Exit if a file or directory already exists at $TARGET
+if [ -e "$TARGET" ]; then
+  printf "Error: A dotfiles directory already exists.\n" 1>&2
+  printf "Remove the directory and run the command again to continue.\n" 1>&2
+  exit 1
+fi
+
+# Install Xcode Command Line Tools if they are not available
+if [ -z "$(xcode-select --print-path 2> /dev/null)" ]; then
+  xcode-select --install
+  printf "Info: Xcode Command Line Tools are required. Downloading...\n"
+  while [ -z "$(xcode-select --print-path 2> /dev/null)" ]; do sleep 10; done
+  printf "Info: Xcode Command Line Tools installation completed.\n"
+fi
+
+# Clone dotfiles into $TARGET if Git is available
+if [ -n "$(command -v git 2> /dev/null)" ]; then
+  git clone "$REMOTE" "$TARGET" 2> /dev/null
+else
+  printf "Error: Git is not available.\n" 1>&2
+  printf "Install Git manually and start the installation again using:\n" 1>&2
+  printf "  xcode-select --install\n" 1>&2
+  printf "  git clone %s\n" "$REMOTE" 1>&2
+  printf "  cd dotfiles && script/setup\n" 1>&2
+  exit 1
+fi
+
+# Start the installation if dotfiles cloning was successful
+if [ -x "$TARGET/script/setup" ]; then
+  cd "$TARGET" && . script/setup
+else
+  printf "Error: Dotfiles cloning failed.\n" 1>&2
+  printf "Clone dotfiles manually and start the installation again using:\n" 1>&2
+  printf "  git clone %s\n" "$REMOTE" 1>&2
+  printf "  cd dotfiles && script/setup\n" 1>&2
+  exit 1
+fi

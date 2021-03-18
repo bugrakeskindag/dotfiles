@@ -1,0 +1,2 @@
+text/html; cat > $TMPDIR/neomutt.html && open $TMPDIR/neomutt.html && sleep 2 && rm -f $TMPDIR/neomutt.html
+text/html; lynx -assume_charset=%{charset} -display_charset=utf-8 -dump %s; nametemplate=%s.html; copiousoutput

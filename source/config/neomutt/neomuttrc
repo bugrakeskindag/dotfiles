@@ -1,0 +1,84 @@
+# IMAP and SMTP
+source "gpg -d $XDG_DATA_HOME/neomutt/account.gpg |"
+set imap_check_subscribed = yes
+set ssl_force_tls = yes
+set ssl_starttls = yes
+
+# Mailboxes
+set spoolfile = "+Inbox"
+set postponed = "+Drafts"
+set trash = "+Deleted"
+unset record
+
+# Crypto
+set crypt_use_gpgme = yes
+set crypt_replyencrypt = yes
+set crypt_verify_sig = yes
+set crypt_protected_headers_write = yes
+set postpone_encrypt = yes
+
+# Compose
+set fast_reply = yes
+set forward_format = "Fwd: %s"
+set forward_quote = yes
+set include = yes
+set mime_forward = yes
+set postpone = no
+set recall = no
+set reverse_name = yes
+set send_charset = "utf-8"
+unset signature
+
+# Read, delete and save
+set delete = yes
+set mark_old = no
+set wait_key = no
+auto_view text/html
+alternative_order text/plain text/enriched text/html
+set mailcap_path = "$XDG_CONFIG_HOME/neomutt/mailcap"
+set attach_save_dir = "$HOME/Downloads"
+
+# Display
+set help = no
+set compose_format = "%> %a Attachment(s) | %l"
+set date_format = "%a %d %h %y %H:%M"
+set index_format = "%3C  %D  %-25.25Fp  %-40.40s  %> %-4.4Z %4cr"
+set pager_format = "%> %b | %C/%m Message(s) | %cr"
+set status_format = "%> %D | %m Message(s) | %l"
+set sort = threads
+set sort_aux = reverse-last-date-received
+set sidebar_sort_method = alpha
+set sidebar_width = 20
+set sidebar_visible = yes
+
+# Colors
+color index red black "~N"
+color index yellow black "~D"
+color indicator green black
+color markers yellow black
+color search black yellow
+color status white black
+color sidebar_highlight yellow black
+color sidebar_new red black
+color sidebar_unread red black
+
+# Vi mode
+bind attach h exit
+bind attach l view-mailcap
+bind index h noop
+bind index j next-entry
+bind index k previous-entry
+bind index l display-message
+bind index g first-entry
+bind index G last-entry
+bind pager h exit
+bind pager j next-line
+bind pager k previous-line
+bind pager l view-attachments
+bind pager g top
+bind pager G bottom
+bind index,pager J sidebar-next
+bind index,pager K sidebar-prev
+bind index,pager L sidebar-open
+bind index,pager B sidebar-toggle-visible
+bind attach,compose,index,pager M display-toggle-weed

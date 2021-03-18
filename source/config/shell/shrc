@@ -1,0 +1,9 @@
+# Aliases
+alias cp="cp -i"
+alias mv="mv -i"
+alias rm="rm -i"
+alias ll="ls -ahl"
+alias py="python3"
+
+# Prompt
+export PS1='$(printf "%s\n$ " "$(pwd | sed s:"$HOME":~:g)")'

@@ -1,0 +1,25 @@
+# General
+export CLICOLOR=1
+export LESSHISTFILE="/dev/null"
+export LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
+export PYTHONDONTWRITEBYTECODE=1
+
+# XDG compliance
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_BIN_HOME="$HOME/.local/bin"
+export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export PASSWORD_STORE_DIR="$XDG_DATA_HOME/pass"
+export ZDOTDIR="$XDG_CONFIG_HOME/shell"
+
+# POSIX compliance
+export EDITOR="nvim"
+export ENV="$XDG_CONFIG_HOME/shell/shrc"
+export HISTFILE="/dev/null"
+export LC_ALL="en_GB.utf-8"
+export PAGER="less"
+export PATH="$XDG_BIN_HOME:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
+
+# Execute tmux
+command -v tmux > /dev/null && [ -z "$TMUX" ] && exec tmux

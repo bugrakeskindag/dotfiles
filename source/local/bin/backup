@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Declare sources and target location
+readonly CODE="$HOME/Code"
+readonly DOCS="$HOME/Documents"
+readonly PICS="$HOME/Pictures"
+readonly TARGET="/Volumes/Backup/Bugra"
+
+# Attempt to backup if rsync is available
+if [ -n "$(command -v rsync 2> /dev/null)" ]; then
+  # Attempt to backup if $TARGET is available
+  if [ -d "$TARGET" ]; then
+    rsync -av --delete "$CODE" "$TARGET"
+    rsync -av --delete "$DOCS" "$TARGET"
+    rsync -av --delete "$PICS" "$TARGET"
+
+    printf "Info: Backup completed.\n"
+  else
+    printf "Error: No directory found at %s\n" "$TARGET" 1>&2
+    exit 1
+  fi
+else
+  printf "Error: rsync is not available.\n" 1>&2
+  exit 1
+fi

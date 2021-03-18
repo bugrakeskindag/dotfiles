@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Display a warning message and get confirmation to proceed
+printf "Warning: This will overwrite any existing setup.\n"
+printf "Enter your password to continue or press Control + C to cancel.\n"
+sudo -v || exit 1
+
+# Keep sudo timestamp valid until installation is completed
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2> /dev/null &
+
+# Remove existing packages and configurations
+[ -x script/remove ] && . script/remove
+
+# Install new packages
+[ -x script/bootstrap ] && . script/bootstrap
+
+# Install new configurations
+[ -x script/configure ] && . script/configure
+
+# Set macOS defaults
+[ -x script/macos ] && . script/macos
+
+# Display a completion message and invalidate sudo timestamp before exiting
+printf "Info: Installation completed. Please restart the computer.\n"
+sudo -k

@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# Symlink (and create .cache) XDG compliant directories and .profile to the $HOME directory
+mkdir "$HOME"/.cache
+ln -snf "$PWD"/source/config "$HOME"/.config
+ln -snf "$PWD"/source/local "$HOME"/.local
+ln -snf "$PWD"/source/profile "$HOME"/.profile
+printf "Info: Dotfiles are symlinked to the \$HOME directory.\n"
+
+# Change default shell to /bin/sh
+if [ "$SHELL" != /bin/sh ]; then
+  chsh -s /bin/sh
+  if [ "$SHELL" = /bin/sh ]; then
+    printf "Info: Default shell is changed to /bin/sh.\n"
+  else
+    printf "Error: Changing default shell failed.\n" 1>&2
+    printf "Change default shell to /bin/sh manually using:\n" 1>&2
+    printf "  chsh -s /bin/sh\n" 1>&2
+  fi
+else
+    printf "Info: Default shell is already /bin/sh.\n"
+fi
+
+# Fix Zsh compinit's 'insecure directories' error and create a directory for its dump file
+sudo chmod -R 755 /usr/local/share/zsh 2> /dev/null
+mkdir -p "$HOME"/.cache/zsh
+
+# Download the preferred color scheme for Neovim
+if [ -n "$(command -v curl 2> /dev/null)" ]; then
+  curl -fsSL https://raw.githubusercontent.com/joshdick/onedark.vim/master/autoload/onedark.vim \
+    --create-dirs -o "$HOME"/.local/share/nvim/site/autoload/onedark.vim
+  curl -fsSL https://raw.githubusercontent.com/joshdick/onedark.vim/master/colors/onedark.vim \
+    --create-dirs -o "$HOME"/.local/share/nvim/site/colors/onedark.vim
+  printf "Info: Neovim theme installation completed.\n"
+else
+  printf "Error: Curl is not available.\n" 1>&2
+  printf "Download the preferred color scheme for Neovim manually from:\n" 1>&2
+  printf "https://github.com/joshdick/onedark.vim\n" 1>&2
+fi

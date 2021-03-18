@@ -1,0 +1,51 @@
+#!/bin/sh
+
+# Set IFS to <space> as a precaution
+export IFS=" "
+
+# Declare files and directories to be included and excluded in the cleanup
+readonly HOME_INCLUDE_RECUR=".DS_Store *.swp"
+readonly HOME_EXCLUDE=".cache .config .local .profile .Trash Code Desktop Documents Downloads Library Pictures"
+readonly CACHE_EXCLUDE="zsh"
+readonly DATA_EXCLUDE=".gitignore gnupg neomutt nvim pass"
+
+# Recursively remove files in the $target which includes the files in $include
+remove_including_recur() {
+  target="$1"
+  include="$2"
+
+  for file in $include; do
+    find "$target" -name "$file" -delete 2> /dev/null
+  done
+
+  printf "Info: Recursively cleaned %s\n" "$target"
+}
+
+# Remove everything from the top-level of $target excluding the files in $exclude
+remove_excluding() {
+  target="$1"
+  exclude="$2"
+
+  for file in "$target"/* "$target"/.[!.]* "$target"/..?*; do
+    file_name="$(basename -- "$file")"
+    found=false
+
+    for excluded in $exclude; do
+      [ "$file_name" = "$excluded" ] && found=true
+    done
+
+    [ "$found" = false ] && [ -e "$file" ] && rm -rf -- "$file" 2> /dev/null
+  done
+
+  printf "Info: Cleaned the top-level of %s\n" "$target"
+}
+
+# Send targets to remover functions along with a list of files to be included/excluded in the cleanup
+main() {
+  remove_including_recur "$HOME" "$HOME_INCLUDE_RECUR"
+  remove_excluding "$HOME" "$HOME_EXCLUDE"
+  remove_excluding "$XDG_CACHE_HOME" "$CACHE_EXCLUDE"
+  remove_excluding "$XDG_DATA_HOME" "$DATA_EXCLUDE"
+}
+
+main
