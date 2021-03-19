@@ -2,7 +2,7 @@
 
 Personal configurations and scripts for setting up a minimalist command-line environment.
 
-For a complete environment setup:
+For a complete environment:
 
 ```sh
 $ sh -c "$(curl -fsSL bugrakeskindag.com/dotfiles)"
